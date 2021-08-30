@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/drawable/background_shape_corner.xml" value="0.22604166666666667" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_create.xml" value="0.20989583333333334" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_note_detail.xml" value="0.22" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/custom_appbar.xml" value="0.18" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/item.xml" value="0.2" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
