@@ -27,10 +27,10 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
         }
     }
 
-    fun deleteNote(uuid : Int) = liveData(Dispatchers.IO){
+    fun deleteNote(ids : ArrayList<Note>) = liveData(Dispatchers.IO){
         emit(Resource.loading(null))
         try {
-            emit(Resource.success(noteRepository.deleteNote(uuid)))
+            emit(Resource.success(noteRepository.deleteNote(ids)))
         }catch (e : Exception){
             emit(Resource.error(null,"an error $e"))
         }

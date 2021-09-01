@@ -16,17 +16,16 @@ class Adapter(private val itemList : ArrayList<Note>, private val listener: INot
         val binding = ItemBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder){
             with(itemList[position]){
                 binding.textView.text = this.text
                 binding.tvDate.text = TextFormatter.fromDate(date)
                 binding.root.setOnClickListener {
-                    listener.onClick(this)
+                    listener.onClick(this, position, binding)
                 }
                 binding.root.setOnLongClickListener {
-                    listener.onLongClick(this)
+                    listener.onLongClick(this, position, binding)
                     true
                 }
             }

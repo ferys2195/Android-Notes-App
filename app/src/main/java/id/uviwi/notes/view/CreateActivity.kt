@@ -43,13 +43,17 @@ class CreateActivity : AppCompatActivity() {
                 if (p0?.isNotEmpty() == true) {
                     _toolbar.constraintSave.visibility = View.VISIBLE
                 } else {
-                    _toolbar.constraintSave.visibility = View.GONE
+                    _toolbar.constraintSave.visibility = View.INVISIBLE
                 }
                 if (helper.canUndo) {
                     _toolbar.constraintUndo.visibility = View.VISIBLE
+                }else {
+                    _toolbar.constraintUndo.visibility = View.INVISIBLE
                 }
                 if (helper.canRedo) {
                     _toolbar.constraintRedo.visibility = View.VISIBLE
+                }else {
+                    _toolbar.constraintRedo.visibility = View.INVISIBLE
                 }
             }
 

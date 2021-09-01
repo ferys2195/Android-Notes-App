@@ -5,10 +5,10 @@
       <map>
         <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/drawable/background_shape_corner.xml" value="0.22604166666666667" />
         <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_create.xml" value="0.20989583333333334" />
-        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/activity_note_detail.xml" value="0.22" />
         <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/custom_appbar.xml" value="0.18" />
-        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/item.xml" value="0.2" />
+        <entry key="..\:/_Development/Android/2021/client/uviwi/Notes/app/src/main/res/layout/item.xml" value="0.33" />
       </map>
     </option>
   </component>

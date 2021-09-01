@@ -2,14 +2,16 @@ package id.uviwi.notes.view
 
 import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import id.uviwi.notes.R
 import id.uviwi.notes.adapter.Adapter
 import id.uviwi.notes.databinding.ActivityMainBinding
 import id.uviwi.notes.databinding.CustomAppbarBinding
+import id.uviwi.notes.databinding.ItemBinding
 import id.uviwi.notes.model.Note
 import id.uviwi.notes.utils.INote
 import id.uviwi.notes.utils.State
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity(), INote {
     private lateinit var _toolbar : CustomAppbarBinding
     private lateinit var adapter: Adapter
     private val model : NoteViewModel by viewModel()
+    private var itemSelection : ArrayList<Note> = ArrayList(arrayListOf())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -29,6 +32,17 @@ class MainActivity : AppCompatActivity(), INote {
         _binding.fabAdd.setOnClickListener {
             startActivity(Intent(this, CreateActivity::class.java))
         }
+        _toolbar.apply {
+            constraintDelete.setOnClickListener {
+                if (itemSelection.size > 0){
+                    dialogBuilderDelete(itemSelection)
+                }
+            }
+            constraintBack.setOnClickListener {
+                onResume()
+            }
+        }
+
     }
 
     override fun onResume() {
@@ -37,8 +51,13 @@ class MainActivity : AppCompatActivity(), INote {
         setupObserver()
     }
     private fun setupUI() {
-        _toolbar.constraintSave.visibility = View.GONE
-        _toolbar.constraintBack.visibility = View.GONE
+        itemSelection.clear()
+        _toolbar.apply {
+            constraintDelete.visibility = View.GONE
+            tvTitle.text = getString(R.string.app_name)
+            constraintSave.visibility = View.GONE
+            constraintBack.visibility = View.GONE
+        }
         adapter = Adapter(arrayListOf(), this)
         _binding.recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         _binding.recyclerView.adapter = adapter
@@ -60,28 +79,28 @@ class MainActivity : AppCompatActivity(), INote {
         })
     }
 
-    private fun dialogBuilderDelete(uuid : Int){
+    private fun dialogBuilderDelete(ids : ArrayList<Note>){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Deleting Note ?")
         builder.setMessage("This action cannot be recovered !")
-        builder.setPositiveButton(android.R.string.yes) { _, _ ->
-            delete(uuid)
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            delete(ids)
         }
 
-        builder.setNegativeButton(android.R.string.no) { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
             dialog.dismiss()
         }
         builder.show()
     }
 
-    private fun delete(uuid : Int){
-        model.deleteNote(uuid).observe(this, {
+    private fun delete(ids : ArrayList<Note>){
+        model.deleteNote(ids).observe(this, {
             when(it.status){
                 State.LOADING -> {
                     Toast.makeText(this, "Loading ...", Toast.LENGTH_SHORT).show()
                 }
                 State.SUCCESS -> {
-                    Toast.makeText(this, "Delete Succesfully", Toast.LENGTH_SHORT).show()
+                    onResume()
                 }
                 State.ERROR -> {
                     Toast.makeText(this, "an Erro ${it.message}", Toast.LENGTH_SHORT).show()
@@ -94,23 +113,47 @@ class MainActivity : AppCompatActivity(), INote {
         adapter.addAll(it)
         adapter.notifyDataSetChanged()
     }
-
-    override fun onClick(note: Note) {
-        val intent = Intent(this, CreateActivity::class.java)
-        intent.putExtra("detail", note)
-        startActivity(intent)
+    private fun updateTitle(view: ItemBinding? = null){
+        if (itemSelection.size == 0){
+            itemSelection.clear()
+            _toolbar.apply {
+                constraintBack.visibility = View.GONE
+                constraintDelete.visibility = View.GONE
+                tvTitle.text = getString(R.string.app_name)
+            }
+            view?.ivCheck?.visibility = View.GONE
+        }else{
+            val itemSize : Int = itemSelection.size
+            val textTitle = "$itemSize ${getString(R.string.selection)}"
+            _toolbar.tvTitle.text = textTitle
+        }
+    }
+    override fun onClick(note: Note, position: Int, view: ItemBinding) {
+        if (itemSelection.size > 0){
+            if (itemSelection.contains(note)){
+                view.ivCheck.visibility = View.INVISIBLE
+                itemSelection.remove(note)
+            }else{
+                itemSelection.add(note)
+                view.ivCheck.visibility = View.VISIBLE
+            }
+            updateTitle(view)
+        }else{
+            val intent = Intent(this, CreateActivity::class.java)
+            intent.putExtra("detail", note)
+            startActivity(intent)
+        }
     }
 
-    override fun onLongClick(note: Note) {
-        // todo : manage long click with multi selection for delete
-        /*
-        * todo
-        *  example : when click 1 item, the action using long click for selection
-        *  after that when the selection > 0, the action using onclick for selection increse
-        * */
-        _toolbar.constraintDelete.visibility = View.VISIBLE
-        _toolbar.constraintDelete.setOnClickListener {
-            dialogBuilderDelete(note.id)
+    override fun onLongClick(note: Note, position: Int, view: ItemBinding) {
+        itemSelection = ArrayList()
+        itemSelection.add(note)
+        updateTitle()
+        view.ivCheck.visibility = View.VISIBLE
+        _toolbar.apply {
+            constraintBack.visibility = View.VISIBLE
+            constraintDelete.visibility = View.VISIBLE
         }
+
     }
 }
